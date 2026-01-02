@@ -1,0 +1,38 @@
+package com.me.e_commerce_application.models.other_dependencies;
+
+import com.me.e_commerce_application.models.User;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDateTime;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "user_cart")
+public class UserCart {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @EqualsAndHashCode.Include
+    private String id;
+
+    @Column(name = "date_time", nullable = false)
+    private LocalDateTime dateTime;
+
+    @Column(name = "item_id", nullable = false)
+    private String itemId;
+
+    @Column(name = "count", nullable = false)
+    private Integer count;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @ToString.Exclude
+    private User user;
+}

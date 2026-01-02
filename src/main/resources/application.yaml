@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: E_commerce_Application
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/ecommerce_application?createDatabaseIfNotExist=true
+    username: root
+    password: ${db.password}
+
+  jpa:
+    show-sql: true
+
+external:
+  api:
+    url: https://api.example.com

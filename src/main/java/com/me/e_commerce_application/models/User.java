@@ -1,0 +1,38 @@
+package com.me.e_commerce_application.models;
+
+import com.me.e_commerce_application.models.sub_dependencies.Address;
+import com.me.e_commerce_application.models.sub_dependencies.PhoneNumber;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "user")
+public class User {
+            @Id
+            @GeneratedValue(strategy = GenerationType.UUID )
+            @Column(name = "id")
+            @EqualsAndHashCode.Include
+            private String id;
+            //common attributes
+            @Column(name = "user_name")
+            private String userName;
+            @Column(name = "user_type")
+            private String userType;
+            // relationships
+            @OneToMany(mappedBy = "user", cascade = {CascadeType.REMOVE} , orphanRemoval = true)
+            @ToString.Exclude
+            private List<Address> addresses = new ArrayList<>();
+            @OneToMany(mappedBy = "user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+            @ToString.Exclude
+            private List<PhoneNumber> phoneNumbers = new ArrayList<>();
+
+}
