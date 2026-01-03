@@ -1,12 +1,14 @@
 package com.me.e_commerce_application.services;
 
+import com.me.e_commerce_application.dto.fetchingDtos.FetchingUserComments;
+import com.me.e_commerce_application.dto.fetchingDtos.FetchingUserFavouriteDto;
 import com.me.e_commerce_application.dto.showingDtos.*;
 import com.me.e_commerce_application.models.User;
 import com.me.e_commerce_application.models.other_dependencies.UserCart;
+import com.me.e_commerce_application.models.other_dependencies.UserComments;
 import com.me.e_commerce_application.models.other_dependencies.UserFavourite;
-import com.me.e_commerce_application.repositories.UserCartRepository;
-import com.me.e_commerce_application.repositories.UserFavouriteRepository;
-import com.me.e_commerce_application.repositories.UserRepository;
+import com.me.e_commerce_application.models.sub_dependencies.UserCredentials;
+import com.me.e_commerce_application.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserCartRepository userCartRepository;
     private final UserFavouriteRepository userFavouriteRepository;
+    private final UserCommentsRepository userCommentsRepository;
+    private final UserCredentialsRepository userCredentialsRepository;
 
     // List of the cart for display
     public List<ShowingUserCartShortDto> showUserCart(String id){
@@ -74,34 +78,59 @@ public class UserService {
                 .build();
     }
 
-    public List<ShowingUserFavouriteDto> showingAllUserFavourite(String userId){
-        // this should need show the user's favourite items in the profile
-        // but i didnt made any decision about profile so now i will stick with what i thought before
-        // just sending array of userFavourite Dtos
+    public List<FetchingUserFavouriteDto> fetchingAllUserFavourite(String userId){
         List<UserFavourite> userFavourite = userFavouriteRepository.findAll();
-        List<ShowingUserFavouriteDto> showingUserFavouriteDtos = new ArrayList<>();
+        List<FetchingUserFavouriteDto> FetchingUserFavouriteDtos = new ArrayList<>();
         for(UserFavourite favourite : userFavourite){
-            showingUserFavouriteDtos.add(
-                    ShowingUserFavouriteDto.builder()
+            FetchingUserFavouriteDtos.add(
+                    FetchingUserFavouriteDto.builder()
                             .userId(favourite.getUserId())
                             .ItemId(favourite.getItemId())
                             .build()
             );
         }
 
-        return showingUserFavouriteDtos;
+        return FetchingUserFavouriteDtos;
     }
 
-    public ItemFullDto showingOneUserFavourite(String userId, String ItemId){
-        return new ItemFullDto();
-    }
+//    public ItemFullDto showingOneUserFavourite(String userId, String ItemId){
+//        return new ItemFullDto();
+//    }
 
-    public List<ShowingUserComments> showingAllUserComment(String userId) {
+    public List<FetchingUserComments> showingAllUserComment(String userId) {
+
         return new ArrayList<>();
     }
 
-    public ShowingUserComments showingOneUserComment(String userId, String ItemId) {
-        return new ShowingUserComments();
-    }
+    public List<FetchingUserComments> showingOneUserComment(String userId, String ItemId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        List<UserComments> userComments = userCommentsRepository.findAllByUserIdAndItemId(userId, ItemId);
+        List<FetchingUserComments> comments = new ArrayList<>();
+        for (UserComments userComment : userComments) {
+            comments.add(FetchingUserComments.builder()
+                    .id(userComment.getId())
+                    .userId(user.getId())
+                    .itemId(userComment.getItemId())
+                    .userName(user.getUserName())
+                    .comment(userComment.getComment())
+                    .date(userComment.getDateTime())
+                    .build());
 
+        }
+        return comments;
+    }
+    //UserProfile
+    public UserProfileDto showingUserProfile(String userId){
+        User user = userRepository.findById(userId).orElseThrow();
+        UserCredentials userCredentials = userCredentialsRepository.findById(userId).orElseThrow(); // need to be secure(need to check is the jwt token valid)
+        // mapping
+        return UserProfileDto.builder() //need to add profile pic,first and lastname
+                .id(user.getId())
+                .userName(user.getUserName())
+                .email(userCredentials.getEmail())
+                .userType(user.getUserType())
+                .phoneNumbers(user.getPhoneNumbers())
+                .addresses(user.getAddresses())
+                .build();
+    }
 }

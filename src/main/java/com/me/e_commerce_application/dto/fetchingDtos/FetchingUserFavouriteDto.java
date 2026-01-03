@@ -1,11 +1,11 @@
-package com.me.e_commerce_application.dto.showingDtos;
+package com.me.e_commerce_application.dto.fetchingDtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 @AllArgsConstructor
 @Builder
-public class ShowingUserFavouriteDto {
+public class FetchingUserFavouriteDto {
     String userId;
     String ItemId;
 }

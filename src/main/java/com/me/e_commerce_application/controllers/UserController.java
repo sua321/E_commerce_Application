@@ -1,6 +1,7 @@
 package com.me.e_commerce_application.controllers;
 
-import com.me.e_commerce_application.dto.savingDtos.SavingUserCartDto;
+import com.me.e_commerce_application.dto.fetchingDtos.FetchingUserComments;
+import com.me.e_commerce_application.dto.fetchingDtos.FetchingUserFavouriteDto;
 import com.me.e_commerce_application.dto.showingDtos.*;
 import com.me.e_commerce_application.services.UserService;
 import lombok.AllArgsConstructor;
@@ -21,23 +22,28 @@ public class UserController {
     public ShowingUserCartFullDto showSpecificItemInCart(String userId, String itemId) {
         return userService.showSpecificItemInCart(userId, itemId);
     }
+//User Profile
+    public UserProfileDto showingUserProfile(String userId){
+        return userService.showingUserProfile(userId);
+    }
 
-    //Note: i have to modify all the plans that are below(for user profile)
+    //Note: i can use React use effect for fetching this alongside with other http request
     //User Favourite
-    public List<ShowingUserFavouriteDto> showingAllUserFavourite(String userId) {
-        return userService.showingAllUserFavourite(userId);
+    public List<FetchingUserFavouriteDto> fetchingAllUserFavourite(String userId) {
+        return userService.fetchingAllUserFavourite(userId);
     }
 
-    public ItemFullDto showingOneUserFavourite(String userId, String ItemId) {
-        return userService.showingOneUserFavourite(userId, ItemId);
-    }
+//    public ItemFullDto showingOneUserFavourite(String userId, String ItemId) {
+//        return userService.showingOneUserFavourite(userId, ItemId);
+//    }
 
     //User comments
-    public List<ShowingUserComments> showingAllUserComment(String userId) {
-        return userService.showingAllUserComment(userId);
-    }
+//    public List<FetchingUserComments> showingAllUserComment(String userId) {
+//        return userService.showingAllUserComment(userId);
+//    }
 
-    public ShowingUserComments showingOneUserComment(String userId, String ItemId) {
+    public List<FetchingUserComments> showingOneUserComment(String userId, String ItemId) {
+//        Note: i can use React use effect for fetching this alongside with other http request
         return userService.showingOneUserComment(userId, ItemId);
     }
 }
