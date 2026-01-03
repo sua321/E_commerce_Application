@@ -1,7 +1,11 @@
 package com.me.e_commerce_application.dto.showingDtos;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
+import java.time.LocalDateTime;
+@AllArgsConstructor
+@Builder
 public class ShowingUserCartShortDto { // lists of cart items
     String userId;
     String itemId;

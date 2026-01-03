@@ -17,11 +17,12 @@ public class UserController {
         // I use  the SavingUserCartDto is for example, but it has different purpose(saving in db)
         return userService.showUserCart(id);
     }
-
+        // these itemId and userId will be come from frontend
     public ShowingUserCartFullDto showSpecificItemInCart(String userId, String itemId) {
         return userService.showSpecificItemInCart(userId, itemId);
     }
 
+    //Note: i have to modify all the plans that are below(for user profile)
     //User Favourite
     public List<ShowingUserFavouriteDto> showingAllUserFavourite(String userId) {
         return userService.showingAllUserFavourite(userId);

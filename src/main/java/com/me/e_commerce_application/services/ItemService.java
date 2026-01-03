@@ -29,7 +29,7 @@ public class ItemService {
                 .body(new ParameterizedTypeReference<List<ItemShortDetailsDao>>() {});
     }
 
-    public static ItemFullDto showOneItem(String id, ItemDetailsDao items){
+    public static ItemFullDto showOneItem(String id){
         // logic
         return new ItemFullDto();
     }

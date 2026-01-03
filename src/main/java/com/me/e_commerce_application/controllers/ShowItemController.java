@@ -22,7 +22,7 @@ public class ShowItemController {
         return itemService.showAllItems();
     }
     @GetMapping("/2")
-    public ItemFullDto getOneItem(String id, ItemDetailsDao items){
-        return itemService.showOneItem(id, items);
+    public ItemFullDto getOneItem(String id){
+        return ItemService.showOneItem(id);
     }
 }

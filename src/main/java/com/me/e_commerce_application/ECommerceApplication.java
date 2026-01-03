@@ -13,14 +13,14 @@ public class ECommerceApplication {
         ApplicationContext context = SpringApplication.run(ECommerceApplication.class, args);
 
         UserRepository userRepository = context.getBean(UserRepository.class);
-
-        userRepository.save(
-                User.builder()
-                        .userName("Lol")
-                        .userType("admin")
-                        .build()
-
-        );
+//
+//        userRepository.save(
+//                User.builder()
+//                        .userName("Lol")
+//                        .userType("admin")
+//                        .build()
+//
+//        );
     }
 
 
