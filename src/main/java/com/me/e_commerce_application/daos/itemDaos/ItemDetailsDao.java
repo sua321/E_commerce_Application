@@ -1,4 +1,4 @@
-package com.me.e_commerce_application.daos;
+package com.me.e_commerce_application.daos.itemDaos;
 
 
 public record ItemDetailsDao(String itemId, String itemName, String category, String showcaseImage, String images,
