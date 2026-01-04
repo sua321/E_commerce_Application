@@ -1,9 +1,7 @@
 package com.me.e_commerce_application.controllers;
 
-import com.me.e_commerce_application.daos.ItemDetailsDao;
-import com.me.e_commerce_application.daos.ItemShortDetailsDao;
+import com.me.e_commerce_application.daos.itemDaos.ItemShortDetailsDao;
 import com.me.e_commerce_application.dto.showingDtos.ItemFullDto;
-import com.me.e_commerce_application.dto.showingDtos.ItemShortDto;
 import com.me.e_commerce_application.services.ItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -25,7 +25,7 @@ public class UserCredentials {
     private String password;
     // relationships
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id")
     @MapsId
     @ToString.Exclude
