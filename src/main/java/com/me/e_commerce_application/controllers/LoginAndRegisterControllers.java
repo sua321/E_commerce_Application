@@ -3,22 +3,26 @@ package com.me.e_commerce_application.controllers;
 import com.me.e_commerce_application.daos.userDaos.UserLoginDao;
 import com.me.e_commerce_application.daos.userDaos.UserRegistrationDao;
 import com.me.e_commerce_application.services.UserRegistrationAndLoginService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 
 @RestController
+@RequestMapping("/user")
 public class LoginAndRegisterControllers {
    private final UserRegistrationAndLoginService userRegistrationAndLoginService;
 
-    @PostMapping
-    public String  userRegistration(UserRegistrationDao userRegistrationDao){
+    @PostMapping("/register")
+    public String  userRegistration(@RequestBody @Valid UserRegistrationDao userRegistrationDao){
         return userRegistrationAndLoginService.registeringCustomerOrVendor(userRegistrationDao);
     }
 
-    @PostMapping
-    public String userLogin(UserLoginDao userLoginDao){
+    @PostMapping("/login")
+    public String userLogin(@RequestBody @Valid UserLoginDao userLoginDao){
        return userRegistrationAndLoginService.userLogin(userLoginDao);
     }
 }
