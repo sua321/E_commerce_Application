@@ -14,10 +14,10 @@ public class UserRegistrationAndLoginService {
     UserCredentialsRepository userCredentialsRepository;
     UserRepository userRepository;
     public String registeringCustomerOrVendor(UserRegistrationDao dao){  // admin needs separate registration method
-        User user = userRepository.findUserByUserName(dao.username());
+        User user = userRepository.findUserByUserName(dao.userName());
         if(user == null){
             User newUser = User.builder()
-                    .userName(dao.username())
+                    .userName(dao.userName())
                     .userType(dao.userType()) // need ot add DOB
                     .build();
             UserCredentials newUserCredentials = UserCredentials.builder()
@@ -39,6 +39,8 @@ public class UserRegistrationAndLoginService {
             return "Login failed";
         if(userLoginDao.email() == null){
             User user = userRepository.findUserByUserName(userLoginDao.userName());
+            if(user == null)
+                return "Username or Password is wrong(userName)";
             UserCredentials userCredentials = userCredentialsRepository.findById(user.getId()).orElseThrow();
             if(userCredentials.getPassword().equals(userLoginDao.password())){
                 return "login Successfully";
@@ -47,6 +49,8 @@ public class UserRegistrationAndLoginService {
             }
         } else if (userLoginDao.userName() == null) {
             UserCredentials userCredential = userCredentialsRepository.findUserCredentialsByEmail(userLoginDao.email());
+            if(userCredential == null)
+                return "Email or Password is wrong(Email)";
             if (userCredential.getPassword().equals(userLoginDao.password())) {
                 return "login Successfully";
             } else{
