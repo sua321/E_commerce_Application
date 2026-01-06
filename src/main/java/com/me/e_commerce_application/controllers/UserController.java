@@ -5,16 +5,21 @@ import com.me.e_commerce_application.dto.fetchingDtos.FetchingUserFavouriteDto;
 import com.me.e_commerce_application.dto.showingDtos.*;
 import com.me.e_commerce_application.services.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 @AllArgsConstructor
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 
-    public List<ShowingUserCartShortDto> showUserCart(String id) {
+    @PostMapping("/userCart/{id}")
+    public List<ShowingUserCartShortDto> showUserCart(@PathVariable String  id) {
         // I use  the SavingUserCartDto is for example, but it has different purpose(saving in db)
         return userService.showUserCart(id);
     }

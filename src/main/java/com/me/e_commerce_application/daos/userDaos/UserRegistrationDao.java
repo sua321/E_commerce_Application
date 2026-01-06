@@ -8,6 +8,7 @@ public record UserRegistrationDao(
         @NotBlank(message = "Email is required") String email,
         @NotBlank(message = "Username is required") String userName,
         @NotBlank(message = "Password is required") String password,
+        @NotBlank(message = "UserType is required")
         String userType,
         String fullName,
         @NotBlank(message = "Date of birth required")
