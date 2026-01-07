@@ -1,6 +1,6 @@
 package com.me.e_commerce_application.models.main_dependencies;
 
-import com.me.e_commerce_application.models.User;
+import com.me.e_commerce_application.models.Users;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,5 +24,5 @@ public class Customer {
     @MapsId
     @JoinColumn(name = "user_id")
     @ToString.Exclude
-    private User user;
+    private Users users;
 }

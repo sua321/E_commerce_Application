@@ -1,7 +1,7 @@
 # E-Commerce Application Backend
 
 ## 📌 Overview
-This project is a backend REST API for an E-commerce platform built using **Java 21** and **Spring Boot**. It handles user management, shopping cart operations, and integrates with external services to fetch product details.
+This project is a backend REST API for an E-commerce platform built using **Java 21** and **Spring Boot**. It handles users management, shopping cart operations, and integrates with external services to fetch product details.
 
 This application demonstrates modern backend development practices, including database migrations, external API consumption, and a layered architecture.
 

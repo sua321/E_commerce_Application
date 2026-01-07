@@ -12,12 +12,12 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AgeVarification {
     // The default error message
-    String message() default "User must be at least 18 years old";
+    String message() default "Users must be at least 18 years old";
 
     // Required boilerplate for Spring Validation
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
-    // Allow the user to specify the age (e.g., @MinimumAge(value = 21))
+    // Allow the users to specify the age (e.g., @MinimumAge(value = 21))
     int value() default 18;
 }

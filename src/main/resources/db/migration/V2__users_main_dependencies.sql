@@ -5,7 +5,7 @@ CREATE TABLE admin
         PRIMARY KEY,
     adminPass VARCHAR(255) NOT NULL,
     CONSTRAINT admin_user_id_fk
-        FOREIGN KEY (user_id) REFERENCES user (id)
+        FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE customer
@@ -13,7 +13,7 @@ CREATE TABLE customer
     user_id VARCHAR(36) NOT NULL
         PRIMARY KEY,
     CONSTRAINT customer_user_id_fk
-        FOREIGN KEY (user_id) REFERENCES user (id)
+        FOREIGN KEY (user_id) REFERENCES users (id)
 );
 CREATE TABLE vendor
 (
@@ -21,5 +21,5 @@ CREATE TABLE vendor
         PRIMARY KEY,
     vendorPass VARCHAR(255) NOT NULL,
     CONSTRAINT vendor_user_id_fk
-        FOREIGN KEY (user_id) REFERENCES user (id)
+        FOREIGN KEY (user_id) REFERENCES users (id)
 );

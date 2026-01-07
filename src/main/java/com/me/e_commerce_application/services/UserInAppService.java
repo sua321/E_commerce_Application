@@ -3,7 +3,7 @@ package com.me.e_commerce_application.services;
 import com.me.e_commerce_application.dto.fetchingDtos.FetchingUserComments;
 import com.me.e_commerce_application.dto.fetchingDtos.FetchingUserFavouriteDto;
 import com.me.e_commerce_application.dto.showingDtos.*;
-import com.me.e_commerce_application.models.User;
+import com.me.e_commerce_application.models.Users;
 import com.me.e_commerce_application.models.other_dependencies.UserCart;
 import com.me.e_commerce_application.models.other_dependencies.UserComments;
 import com.me.e_commerce_application.models.other_dependencies.UserFavourite;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 @AllArgsConstructor
 @Service
-public class UserService {
+public class UserInAppService {
     private final UserRepository userRepository;
     private final UserCartRepository userCartRepository;
     private final UserFavouriteRepository userFavouriteRepository;
@@ -34,7 +34,7 @@ public class UserService {
             // mapping
            shortCart.add(
                    ShowingUserCartShortDto.builder()
-                           .userId(cart.getUser().getId())
+                           .userId(cart.getUsers().getId())
                            .itemId(cart.getItemId())
                            .image(item.showCaseImage)
                            .price(item.price)
@@ -60,16 +60,16 @@ public class UserService {
     String manufacture;
     String price;
     boolean availability;*/
-        User user = userRepository.findById(userId).orElseThrow();
+        Users users = userRepository.findById(userId).orElseThrow();
         UserCart userCart = userCartRepository.findByUserIdAndItemId(userId, itemId);
         ItemFullDto item = ItemService.showOneItem(itemId);
         // mapping
         return  ShowingUserCartFullDto.builder()
-                .userId(user.getId())
-                .userName(user.getUserName())
+                .userId(users.getId())
+                .userName(users.getUserName())
                 .addedDateAndTime(userCart.getDateTime())
                 .itemId(item.itemId)
-                .itemImage(item.showCaseImage) // this should not be showcase image rather image of item user added to the cart
+                .itemImage(item.showCaseImage) // this should not be showcase image rather image of item users added to the cart
                 .count(item.stock)
                 .vendor(item.vendor)
                 .manufacture(item.manufacture)
@@ -103,15 +103,15 @@ public class UserService {
     }
 
     public List<FetchingUserComments> showingOneUserComment(String userId, String ItemId) {
-        User user = userRepository.findById(userId).orElseThrow();
+        Users users = userRepository.findById(userId).orElseThrow();
         List<UserComments> userComments = userCommentsRepository.findAllByUserIdAndItemId(userId, ItemId);
         List<FetchingUserComments> comments = new ArrayList<>();
         for (UserComments userComment : userComments) {
             comments.add(FetchingUserComments.builder()
                     .id(userComment.getId())
-                    .userId(user.getId())
+                    .userId(users.getId())
                     .itemId(userComment.getItemId())
-                    .userName(user.getUserName())
+                    .userName(users.getUserName())
                     .comment(userComment.getComment())
                     .date(userComment.getDateTime())
                     .build());
@@ -121,16 +121,16 @@ public class UserService {
     }
     //UserProfile
     public UserProfileDto showingUserProfile(String userId){
-        User user = userRepository.findById(userId).orElseThrow();
+        Users users = userRepository.findById(userId).orElseThrow();
         UserCredentials userCredentials = userCredentialsRepository.findById(userId).orElseThrow(); // need to be secure(need to check is the jwt token valid)
         // mapping
         return UserProfileDto.builder() //need to add profile pic,first and lastname
-                .id(user.getId())
-                .userName(user.getUserName())
+                .id(users.getId())
+                .userName(users.getUserName())
                 .email(userCredentials.getEmail())
-                .userType(user.getUserType())
-                .phoneNumbers(user.getPhoneNumbers())
-                .addresses(user.getAddresses())
+                .userType(users.getUserType())
+                .phoneNumbers(users.getPhoneNumbers())
+                .addresses(users.getAddresses())
                 .build();
     }
 }
