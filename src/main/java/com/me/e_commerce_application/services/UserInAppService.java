@@ -17,16 +17,16 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class UserInAppService {
-    private final UserRepository userRepository;
+    private final UsersRepository usersRepository;
     private final UserCartRepository userCartRepository;
-    private final UserFavouriteRepository userFavouriteRepository;
-    private final UserCommentsRepository userCommentsRepository;
-    private final UserCredentialsRepository userCredentialsRepository;
+    private final UsersFavouriteRepository usersFavouriteRepository;
+    private final UsersCommentsRepository usersCommentsRepository;
+    private final UsersCredentialsRepository usersCredentialsRepository;
 
     // List of the cart for display
     public List<ShowingUserCartShortDto> showUserCart(String id){
         List<ShowingUserCartShortDto> shortCart = new ArrayList<>();
-        List<UserCart> userCart = userCartRepository.findAllByUserId(id);
+        List<UserCart> userCart = userCartRepository.findAllByUsersId(id);
         // mapping to showingUserCartShortDto
 
         for(UserCart cart : userCart){
@@ -60,8 +60,8 @@ public class UserInAppService {
     String manufacture;
     String price;
     boolean availability;*/
-        Users users = userRepository.findById(userId).orElseThrow();
-        UserCart userCart = userCartRepository.findByUserIdAndItemId(userId, itemId);
+        Users users = usersRepository.findById(userId).orElseThrow();
+        UserCart userCart = userCartRepository.findByUsersIdAndItemId(userId, itemId);
         ItemFullDto item = ItemService.showOneItem(itemId);
         // mapping
         return  ShowingUserCartFullDto.builder()
@@ -79,7 +79,7 @@ public class UserInAppService {
     }
 
     public List<FetchingUserFavouriteDto> fetchingAllUserFavourite(String userId){
-        List<UserFavourite> userFavourite = userFavouriteRepository.findAll();
+        List<UserFavourite> userFavourite = usersFavouriteRepository.findAll();
         List<FetchingUserFavouriteDto> FetchingUserFavouriteDtos = new ArrayList<>();
         for(UserFavourite favourite : userFavourite){
             FetchingUserFavouriteDtos.add(
@@ -103,8 +103,8 @@ public class UserInAppService {
     }
 
     public List<FetchingUserComments> showingOneUserComment(String userId, String ItemId) {
-        Users users = userRepository.findById(userId).orElseThrow();
-        List<UserComments> userComments = userCommentsRepository.findAllByUserIdAndItemId(userId, ItemId);
+        Users users = usersRepository.findById(userId).orElseThrow();
+        List<UserComments> userComments = usersCommentsRepository.findAllByUsersIdAndItemId(userId, ItemId);
         List<FetchingUserComments> comments = new ArrayList<>();
         for (UserComments userComment : userComments) {
             comments.add(FetchingUserComments.builder()
@@ -121,8 +121,8 @@ public class UserInAppService {
     }
     //UserProfile
     public UserProfileDto showingUserProfile(String userId){
-        Users users = userRepository.findById(userId).orElseThrow();
-        UserCredentials userCredentials = userCredentialsRepository.findById(userId).orElseThrow(); // need to be secure(need to check is the jwt token valid)
+        Users users = usersRepository.findById(userId).orElseThrow();
+        UserCredentials userCredentials = usersCredentialsRepository.findById(userId).orElseThrow(); // need to be secure(need to check is the jwt token valid)
         // mapping
         return UserProfileDto.builder() //need to add profile pic,first and lastname
                 .id(users.getId())

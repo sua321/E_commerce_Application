@@ -1,12 +1,12 @@
 package com.me.e_commerce_application.services;
 
-import com.me.e_commerce_application.daos.userDaos.UserLoginDao;
 import com.me.e_commerce_application.daos.userDaos.UserRegistrationDao;
 import com.me.e_commerce_application.models.Users;
 import com.me.e_commerce_application.models.sub_dependencies.UserCredentials;
-import com.me.e_commerce_application.repositories.UserCredentialsRepository;
-import com.me.e_commerce_application.repositories.UserRepository;
+import com.me.e_commerce_application.repositories.UsersCredentialsRepository;
+import com.me.e_commerce_application.repositories.UsersRepository;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,12 +19,13 @@ import java.util.Collections;
 @AllArgsConstructor
 @Service
 public class UserRegistrationAndLoginService implements UserDetailsService {
-    UserCredentialsRepository userCredentialsRepository;
-    UserRepository userRepository;
+    UsersCredentialsRepository usersCredentialsRepository;
+    UsersRepository usersRepository;
     PasswordEncoder passwordEncoder;
     public String registeringCustomerOrVendor(UserRegistrationDao dao){  // admin needs separate registration method
-        Users users = userRepository.findUserByUserName(dao.userName());
-        if(users == null){
+        Users users = usersRepository.findUserByUserName(dao.userName());
+        UserCredentials userCredentials = usersCredentialsRepository.findUsersCredentialsByEmail(dao.email());
+        if(users == null && userCredentials==null){
             Users newUsers = Users.builder()
                     .userName(dao.userName())
                     .userType(dao.userType()) // need ot add DOB
@@ -34,7 +35,7 @@ public class UserRegistrationAndLoginService implements UserDetailsService {
                     .password(passwordEncoder.encode(dao.password()))
                     .users(newUsers)
                     .build();
-            userCredentialsRepository.save(newUserCredentials); // hibernate will automatically save newUsers Object
+            usersCredentialsRepository.save(newUserCredentials); // hibernate will automatically save newUsers Object
             return "Registration Successfully";
 
         }
@@ -43,68 +44,30 @@ public class UserRegistrationAndLoginService implements UserDetailsService {
         }
     }
 
-//    public String userLogin(UserLoginDao userLoginDao){ // admin, customer, vendor all can login through this
-//        if((userLoginDao.email() == null && userLoginDao.userName() == null) || userLoginDao.password() == null)
-//            return "Login failed";
-//        if(userLoginDao.email() == null){
-//            Users users = userRepository.findUserByUserName(userLoginDao.userName());
-//            if(users == null)
-//                return "Username or Password is wrong(userName)";
-//
-//            UserCredentials userCredentials = userCredentialsRepository.findById(users.getId()).orElseThrow();
-//            if(passwordEncoder.matches(userLoginDao.password(), userCredentials.getPassword())){
-//                return "login Successfully";
-//            } else {
-//                return "Username or Password is wrong";
-//            }
-//        } else if (userLoginDao.userName() == null) {
-//            UserCredentials userCredential = userCredentialsRepository.findUserCredentialsByEmail(userLoginDao.email());
-//            if(userCredential == null)
-//                return "Email or Password is wrong(Email)";
-//            if (passwordEncoder.matches(userLoginDao.password(), userCredential.getPassword())) {
-//                return "login Successfully";
-//            } else{
-//                return "Email or Password is wrong";
-//            }
-//        }
-//
-//        return "Some problem occur Please retry";
-//    }
-
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        return null;
-    }
+    @NonNull
+    public UserDetails loadUserByUsername(@NonNull String identifier) throws UsernameNotFoundException {
+        //Note: in this The identifier(authorized) Should be userName or Email so first should check by userName and if its fail then email(this is Gemini's idea)
+        //Note: but i think this is bad practice bcs in a big db there will be a million or more user so gambling like this will cause more time consuming and i also got some weird bugs
+        // 1. Try to find the user by UserName first
+        Users user = usersRepository.findUserByUserName(identifier);
+        
+        if (user != null) {
+            // Found by username, fetch credentials
+            UserCredentials creds = usersCredentialsRepository.findById(user.getId())
+                    .orElseThrow(() -> new UsernameNotFoundException("User found but credentials missing"));
+            return new User(user.getUserName(), creds.getPassword(), Collections.emptyList());
+        }
 
-    // overloading
-    public UserDetails loadUserByUsername(UserLoginDao userLoginDao) throws UsernameNotFoundException{// admin, customer, vendor all can login through this
-        if((userLoginDao.email() == null && userLoginDao.userName() == null) || userLoginDao.password() == null) {
-            System.out.println("Login failed");
+        // 2. If not found by username, try to find by Email
+        UserCredentials creds = usersCredentialsRepository.findUsersCredentialsByEmail(identifier);
+        
+        if (creds != null) {
+            // Found by email
+            return new User(creds.getEmail(), creds.getPassword(), Collections.emptyList());
         }
-        //Through UserName
-        if(userLoginDao.email() == null) {
-            Users users = userRepository.findUserByUserName(userLoginDao.userName());
-            try{
-                UserCredentials userCredentials = userCredentialsRepository.findById(users.getId()).orElseThrow();
-                return new User(users.getUserName(), userCredentials.getPassword(), Collections.emptyList());
-            }
-            catch (Exception e){
-                System.out.println("Username or Password is wrong(userName)");
-            }
-        //Through Email
-        }else if (userLoginDao.userName() == null) {
-            UserCredentials userCredential = userCredentialsRepository.findUserCredentialsByEmail(userLoginDao.email());
-            try{
-                return new User(
-                        userCredential.getEmail(),
-                        userCredential.getPassword(),
-                        Collections.emptyList()
-                );
-            }
-            catch (Exception e){
-                System.out.println("Email or Password is wrong(Email)");
-            }
-        }
-        return null;
+
+        // 3. If neither found
+        throw new UsernameNotFoundException("User not found with username or email: " + identifier);
     }
 }

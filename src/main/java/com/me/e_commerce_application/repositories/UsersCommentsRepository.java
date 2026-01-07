@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface UserCommentsRepository extends JpaRepository<UserComments, String> {
-    List<UserComments> findAllByUserIdAndItemId(String userId, String itemId);
+public interface UsersCommentsRepository extends JpaRepository<UserComments, String> {
+    List<UserComments> findAllByUsersIdAndItemId(String userId, String itemId);
 }

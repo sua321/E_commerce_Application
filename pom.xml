@@ -82,7 +82,7 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <configuration>
                     <url>jdbc:mysql://localhost:3306/ecommerce_application?createDatabaseIfNotExist=true</url>
-                    <users>root</users>
+                    <user>root</user>
                     <password>${db.password}</password>
                     <cleanDisabled>false</cleanDisabled>
                 </configuration>

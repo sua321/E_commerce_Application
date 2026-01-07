@@ -1,6 +1,6 @@
 package com.me.e_commerce_application;
 
-import com.me.e_commerce_application.repositories.UserRepository;
+import com.me.e_commerce_application.repositories.UsersRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -11,9 +11,9 @@ public class ECommerceApplication {
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(ECommerceApplication.class, args);
 
-        UserRepository userRepository = context.getBean(UserRepository.class);
+        UsersRepository usersRepository = context.getBean(UsersRepository.class);
 //
-//        userRepository.save(
+//        usersRepository.save(
 //                Users.builder()
 //                        .userName("Lol")
 //                        .userType("admin")
