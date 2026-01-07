@@ -1,6 +1,6 @@
 package com.me.e_commerce_application.models.sub_dependencies;
 
-import com.me.e_commerce_application.models.User;
+import com.me.e_commerce_application.models.Users;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,5 +26,5 @@ public class PhoneNumber {
     @MapsId
     @JoinColumn(name = "id")
     @ToString.Exclude
-    private User user;
+    private Users users;
 }

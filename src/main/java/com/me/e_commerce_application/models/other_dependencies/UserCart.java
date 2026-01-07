@@ -1,6 +1,6 @@
 package com.me.e_commerce_application.models.other_dependencies;
 
-import com.me.e_commerce_application.models.User;
+import com.me.e_commerce_application.models.Users;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,5 +34,5 @@ public class UserCart {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
-    private User user;
+    private Users users;
 }

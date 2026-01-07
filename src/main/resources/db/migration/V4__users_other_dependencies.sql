@@ -7,7 +7,7 @@ CREATE TABLE user_cart
     item_id   VARCHAR(36) NOT NULL,
     count     INT         NOT NULL,
     CONSTRAINT user_cart_user_id_fk
-        FOREIGN KEY (user_id) REFERENCES user (id)
+        FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE user_favourite
@@ -16,7 +16,7 @@ CREATE TABLE user_favourite
         PRIMARY KEY,
     item_id VARCHAR(36) NOT NULL,
     CONSTRAINT user_favourite_user_id_fk
-        FOREIGN KEY (user_id) REFERENCES user (id)
+        FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE user_comment
@@ -28,5 +28,5 @@ CREATE TABLE user_comment
     item_id   VARCHAR(36)  NOT NULL,
     comment   VARCHAR(500) NOT NULL,
     CONSTRAINT user_comment_user_id_fk
-        FOREIGN KEY (user_id) REFERENCES user (id)
+        FOREIGN KEY (user_id) REFERENCES users (id)
 );

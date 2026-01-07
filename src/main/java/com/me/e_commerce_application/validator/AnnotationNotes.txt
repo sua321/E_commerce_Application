@@ -29,7 +29,7 @@ AOP (Aspect Oriented Programming): You could create an annotation like @LogExecu
 2.
 Custom Configuration: You can create annotations to configure how your classes are treated by libraries (like how @Entity tells Hibernate "this is a table").
 3.
-Clean Code: It separates business rules (e.g., "Must be 18") from business logic (e.g., "Register the user").
+Clean Code: It separates business rules (e.g., "Must be 18") from business logic (e.g., "Register the users").
 A Small Improvement
 I noticed in your UserRegistrationAndLoginService.java, you have a comment // need ot add DOB.
 Since you went through the effort of validating the DOB, you should probably save it to your database! Currently, your User entity creation ignores the DOB from the DAO.
@@ -49,8 +49,8 @@ And update your Service to actually save it:
 Diff
 +2
 -1
-         if(user == null){
-             User newUser = User.builder()
+         if(users == null){
+             User newUsers = User.builder()
                      .userName(dao.username())
                      .userType(dao.userType()) // need ot add DOB
                      .userType(dao.userType())

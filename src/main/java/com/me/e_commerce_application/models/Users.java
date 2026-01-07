@@ -16,7 +16,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "user")
-public class User {
+public class Users {
             @Id
             @GeneratedValue(strategy = GenerationType.UUID )
             @Column(name = "id")
@@ -28,10 +28,10 @@ public class User {
             @Column(name = "user_type")
             private String userType;
             // relationships
-            @OneToMany(mappedBy = "user", cascade = {CascadeType.REMOVE} , orphanRemoval = true)
+            @OneToMany(mappedBy = "users", cascade = {CascadeType.REMOVE} , orphanRemoval = true)
             @ToString.Exclude
             private List<Address> addresses = new ArrayList<>();
-            @OneToMany(mappedBy = "user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+            @OneToMany(mappedBy = "users", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
             @ToString.Exclude
             private List<PhoneNumber> phoneNumbers = new ArrayList<>();
 

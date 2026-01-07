@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ShowingUserCartFullDto {
-    // this is bit different from Item fullDto bcs this will include user's name and order count and other details
+    // this is bit different from Item fullDto bcs this will include users's name and order count and other details
     String userId;
     String userName;
     LocalDateTime addedDateAndTime;
