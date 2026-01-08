@@ -5,11 +5,16 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/ecommerce_application?createDatabaseIfNotExist=true
     username: root
-    password: ${db.password}
+    password: ${DB_PASSWORD}
 
   jpa:
     show-sql: true
+  jwt:
+    secret: ${JWT_SECRET}
+
 
 external:
   api:
-    url: https://api.example.com
+    url: ${EXTERNAL_API}
+
+
