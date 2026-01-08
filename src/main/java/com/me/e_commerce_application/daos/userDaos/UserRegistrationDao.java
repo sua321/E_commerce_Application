@@ -2,12 +2,14 @@ package com.me.e_commerce_application.daos.userDaos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.me.e_commerce_application.validator.custom_annotations.AgeVarification;
+import com.me.e_commerce_application.validator.custom_annotations.EmailCheck;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 public record UserRegistrationDao(
         @NotBlank(message = "Email is required")
         @JsonProperty("email")
+        @EmailCheck
         String email,
 
         @NotBlank(message = "Username is required")
@@ -22,6 +24,7 @@ public record UserRegistrationDao(
         @JsonProperty("userType")
         String userType,
 
+        @NotBlank(message = "Full Name is required")
         @JsonProperty("fullName")
         String fullName,
 
