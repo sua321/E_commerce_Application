@@ -3,6 +3,7 @@ package com.me.e_commerce_application.controllers;
 import com.me.e_commerce_application.daos.userDaos.UserLoginDao;
 import com.me.e_commerce_application.daos.userDaos.UserRegistrationDao;
 import com.me.e_commerce_application.services.UserRegistrationAndLoginService;
+import com.me.e_commerce_application.validator.custom_annotations.EmailCheck;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,12 +32,12 @@ public class LoginAndRegisterControllers {
     public String userLogin(@RequestBody @Valid UserLoginDao userLoginDao){
         // Determine if the user provided a username or an email
         String principal = null;
-        if (userLoginDao.userName() != null && !userLoginDao.userName().isBlank()) {
+        if ((userLoginDao.userName() != null && !userLoginDao.userName().isBlank()) && userLoginDao.email() == null) {
             principal = userLoginDao.userName();
-        } else if (userLoginDao.email() != null && !userLoginDao.email().isBlank()) {
+        } else if ((userLoginDao.email() != null && !userLoginDao.email().isBlank()) && userLoginDao.userName() == null) {
             principal = userLoginDao.email();
         } else {
-            return "Login Failed: Username or Email is required";
+            return "Some problem occur. Please retry";
         }
 
         try {

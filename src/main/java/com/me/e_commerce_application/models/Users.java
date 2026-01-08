@@ -25,6 +25,10 @@ public class Users {
             //common attributes
             @Column(name = "user_name")
             private String userName;
+            @Column(name = "full_name")
+            private String fullName;
+            @Column(name = "dob")
+            private String dob;
             @Column(name = "user_type")
             private String userType;
             // relationships
