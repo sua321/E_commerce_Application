@@ -7,6 +7,8 @@ import com.me.e_commerce_application.repositories.UsersCredentialsRepository;
 import com.me.e_commerce_application.repositories.UsersRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,7 +27,7 @@ public class UserRegistrationAndLoginService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final Pattern emailPattern;
 
-    public String registeringCustomerOrVendor(UserRegistrationDao dao) {  // admin needs separate registration method
+    public ResponseEntity<?> registeringCustomerOrVendor(UserRegistrationDao dao) {  // admin needs separate registration method
         try{
             Users users = usersRepository.findUserByUserName(dao.userName());
             UserCredentials userCredentials = usersCredentialsRepository.findUsersCredentialsByEmail(dao.email());
@@ -42,21 +44,21 @@ public class UserRegistrationAndLoginService implements UserDetailsService {
                         .users(newUsers)
                         .build();
                 usersCredentialsRepository.save(newUserCredentials); // hibernate will automatically save newUsers Object
-                return "Registration Successfully";
+                return ResponseEntity.ok().body("Registration Successful");
 
             } else {
-                return "Users already exist";
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Users already exist");
             }
         }
         catch (Exception e){
             System.out.println("registration" + e.getMessage());
-            return "Something went wrong in Registration Service";
+            return ResponseEntity.badRequest().body("Something went wrong in Registration Service");
         }
     }
 
     @Override
     @NonNull
-    //Ok i fixed Gemini's version issue
+    //Ok i fixed Gemini's version Performance issue
     public UserDetails loadUserByUsername(@NonNull String identifier) throws UsernameNotFoundException {
 
         //Checking, is identifier an email?
@@ -67,6 +69,7 @@ public class UserRegistrationAndLoginService implements UserDetailsService {
                 // Found by email
                 return new User(creds.getEmail(), creds.getPassword(), Collections.emptyList());
             }
+            throw new UsernameNotFoundException("User not found with  email: " + identifier);
 
         }
         //Try to find the user by UserName
@@ -74,12 +77,12 @@ public class UserRegistrationAndLoginService implements UserDetailsService {
         if (user != null) {
             // Found by username, fetch credentials
             UserCredentials creds = usersCredentialsRepository.findById(user.getId())
-                    .orElseThrow(() -> new UsernameNotFoundException("User found but credentials missing"));
+                    .orElseThrow(() -> new UsernameNotFoundException("User found but something went wrong"));
             return new User(user.getUserName(), creds.getPassword(), Collections.emptyList());
         }
 
         // 3. If neither found
-        throw new UsernameNotFoundException("User not found with username or email: " + identifier);
+        throw new UsernameNotFoundException("User not found with username: " + identifier);
 
     }
 }

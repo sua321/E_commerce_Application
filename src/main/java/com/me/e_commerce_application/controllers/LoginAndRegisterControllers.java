@@ -26,7 +26,7 @@ public class LoginAndRegisterControllers {
    private final JWTService jwtService;
 
     @PostMapping("/register")
-    public String  userRegistration(@RequestBody @Valid UserRegistrationDao userRegistrationDao){
+    public ResponseEntity<?>  userRegistration(@RequestBody @Valid UserRegistrationDao userRegistrationDao){
         return userRegistrationAndLoginService.registeringCustomerOrVendor(userRegistrationDao);
     }
 
@@ -43,14 +43,23 @@ public class LoginAndRegisterControllers {
         }
 
         try {
+            //Authentication process
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(principal, userLoginDao.password())
             );
+            //JWT token generating process
             var token = jwtService.generateToken(principal);
             return ResponseEntity.ok(new JwtResponseDto(token));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login Failed: Invalid username or password");
         }
+    }
+    @PostMapping("/validate")
+    public boolean validate(@RequestHeader("Authorization") String authHeader){
+        var token = authHeader.replace("Bearer ", "");
+        System.out.println("Request Validated");
+        return jwtService.validateToken(token);
+
     }
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Void> handleCredentialsException(){
