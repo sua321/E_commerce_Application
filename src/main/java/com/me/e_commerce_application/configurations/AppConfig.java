@@ -19,7 +19,7 @@ public class AppConfig {
         return builder.build();
     }
 
-// Security config
+// this belongs to Security config but due to Circular Dependency
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();

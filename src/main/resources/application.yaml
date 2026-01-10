@@ -9,6 +9,7 @@ spring:
 
   jpa:
     show-sql: true
+    open-in-view: false #by adding this the Spring won't keeps the database connection open until the entire HTTP request finishes
   jwt:
     secret: ${JWT_SECRET}
 
