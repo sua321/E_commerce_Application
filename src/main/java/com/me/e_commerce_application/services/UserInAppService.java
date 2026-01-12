@@ -11,9 +11,12 @@ import com.me.e_commerce_application.models.sub_dependencies.UserCredentials;
 import com.me.e_commerce_application.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+
 @AllArgsConstructor
 @Service
 public class UserInAppService {
@@ -22,33 +25,34 @@ public class UserInAppService {
     private final UsersFavouriteRepository usersFavouriteRepository;
     private final UsersCommentsRepository usersCommentsRepository;
     private final UsersCredentialsRepository usersCredentialsRepository;
+    private final Pattern emailPattern;
 
     // List of the cart for display
-    public List<ShowingUserCartShortDto> showUserCart(String id){
+    public List<ShowingUserCartShortDto> showUserCart(String id) {
         List<ShowingUserCartShortDto> shortCart = new ArrayList<>();
         List<UserCart> userCart = userCartRepository.findAllByUsersId(id);
         // mapping to showingUserCartShortDto
 
-        for(UserCart cart : userCart){
+        for (UserCart cart : userCart) {
             ItemFullDto item = ItemService.showOneItem(cart.getItemId());
             // mapping
-           shortCart.add(
-                   ShowingUserCartShortDto.builder()
-                           .userId(cart.getUsers().getId())
-                           .itemId(cart.getItemId())
-                           .image(item.showCaseImage)
-                           .price(item.price)
-                           .vendor(item.vendor)
-                           .addedDateAndTime(cart.getDateTime())
-                           .count(item.stock)
-                           .build()
-           ) ;
+            shortCart.add(
+                    ShowingUserCartShortDto.builder()
+                            .userId(cart.getUsers().getId())
+                            .itemId(cart.getItemId())
+                            .image(item.showCaseImage)
+                            .price(item.price)
+                            .vendor(item.vendor)
+                            .addedDateAndTime(cart.getDateTime())
+                            .count(item.stock)
+                            .build()
+            );
         }
         return shortCart;
     }
 
-// individual item of cart for display
-    public ShowingUserCartFullDto showSpecificItemInCart(String userId, String itemId){
+    // individual item of cart for display
+    public ShowingUserCartFullDto showSpecificItemInCart(String userId, String itemId) {
         /*
         * String userId;
     String userName;
@@ -64,7 +68,7 @@ public class UserInAppService {
         UserCart userCart = userCartRepository.findByUsersIdAndItemId(userId, itemId);
         ItemFullDto item = ItemService.showOneItem(itemId);
         // mapping
-        return  ShowingUserCartFullDto.builder()
+        return ShowingUserCartFullDto.builder()
                 .userId(users.getId())
                 .userName(users.getUserName())
                 .addedDateAndTime(userCart.getDateTime())
@@ -78,10 +82,10 @@ public class UserInAppService {
                 .build();
     }
 
-    public List<FetchingUserFavouriteDto> fetchingAllUserFavourite(String userId){
+    public List<FetchingUserFavouriteDto> fetchingAllUserFavourite(String userId) {
         List<UserFavourite> userFavourite = usersFavouriteRepository.findAll();
         List<FetchingUserFavouriteDto> FetchingUserFavouriteDtos = new ArrayList<>();
-        for(UserFavourite favourite : userFavourite){
+        for (UserFavourite favourite : userFavourite) {
             FetchingUserFavouriteDtos.add(
                     FetchingUserFavouriteDto.builder()
                             .userId(favourite.getUserId())
@@ -119,18 +123,32 @@ public class UserInAppService {
         }
         return comments;
     }
+
     //UserProfile
-    public UserProfileDto showingUserProfile(String userId){
-        Users users = usersRepository.findById(userId).orElseThrow();
-        UserCredentials userCredentials = usersCredentialsRepository.findById(userId).orElseThrow(); // need to be secure(need to check is the jwt token valid)
-        // mapping
+    @Transactional
+    public UserProfileDto showingUserProfile(String identifier) {
+        UserCredentials userCredentials;
+        Users users;
+        if(emailPattern.matcher(identifier).matches()){
+         userCredentials = usersCredentialsRepository.findUsersCredentialsByEmail(identifier); // need to be secure(need to check is the jwt token valid)
+         users = usersRepository.findById(userCredentials.getId()).orElseThrow();
+        }else {
+            users = usersRepository.findUserByUserName(identifier);
+            userCredentials = usersCredentialsRepository.findById(users.getId()).orElseThrow(); // need to be secure(need to check is the jwt token valid)
+        }
+
+        // Mapping & Initializing Collections
+        // We wrap them in new ArrayList<>(...) to force Hibernate to fetch the data NOW while the transaction is open.
         return UserProfileDto.builder() //need to add profile pic,first and lastname
                 .id(users.getId())
                 .userName(users.getUserName())
                 .email(userCredentials.getEmail())
+                .fullName(users.getFullName())
                 .userType(users.getUserType())
-                .phoneNumbers(users.getPhoneNumbers())
-                .addresses(users.getAddresses())
+                .phoneNumbers(new ArrayList<>(users.getPhoneNumbers()))
+                .addresses(new ArrayList<>(users.getAddresses()))
                 .build();
+
+
     }
 }

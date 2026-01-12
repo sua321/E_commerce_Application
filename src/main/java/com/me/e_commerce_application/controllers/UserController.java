@@ -5,10 +5,9 @@ import com.me.e_commerce_application.dto.fetchingDtos.FetchingUserFavouriteDto;
 import com.me.e_commerce_application.dto.showingDtos.*;
 import com.me.e_commerce_application.services.UserInAppService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @AllArgsConstructor
@@ -18,7 +17,7 @@ import java.util.List;
 public class UserController {
     private final UserInAppService userInAppService;
 
-    @PostMapping("/userCart/{id}")
+    @GetMapping("/userCart/{id}")
     public List<ShowingUserCartShortDto> showUserCart(@PathVariable String  id) {
         // I use  the SavingUserCartDto is for example, but it has different purpose(saving in db)
         return userInAppService.showUserCart(id);
@@ -28,8 +27,20 @@ public class UserController {
         return userInAppService.showSpecificItemInCart(userId, itemId);
     }
 //Users Profile
-    public UserProfileDto showingUserProfile(String userId){
-        return userInAppService.showingUserProfile(userId);
+    @GetMapping("/profile")// getting user using SecurityContextHolder
+    public ResponseEntity<UserProfileDto> showingUserProfile(){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null){
+            return ResponseEntity.notFound().build();
+        }
+        var identifier = (String) authentication.getPrincipal();
+            UserProfileDto userProfileDto = userInAppService.showingUserProfile(identifier);
+            if (userProfileDto == null) {
+//                System.out.println("User is null");
+                return ResponseEntity.notFound().build();
+            }
+//        System.out.println("user is here : " + userProfileDto);
+        return ResponseEntity.ok(userProfileDto);
     }
 
     //Note: i can use React use effect for fetching this alongside with other http request

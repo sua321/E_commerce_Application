@@ -1,5 +1,6 @@
 package com.me.e_commerce_application.configurations;
 
+import com.me.e_commerce_application.filters.JWTAuthenticationFilter;
 import com.me.e_commerce_application.services.UserRegistrationAndLoginService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,11 +13,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
 public class SecurityConfig {
+    private  final JWTAuthenticationFilter jwtAuthenticationFilter;
     private final UserRegistrationAndLoginService userRegistrationAndLoginService;
 //    private final PasswordEncoder passwordEncoder; // for now i dont need to set the userDetails service and the passWord Encoder manually spring will do it automatically
 
@@ -56,8 +59,8 @@ public class SecurityConfig {
                         .requestMatchers("/item/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/user/register").permitAll()
                         .requestMatchers(HttpMethod.POST,"/user/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/user/validate").permitAll()
+                       // .requestMatchers(HttpMethod.POST,"/user/validate").permitAll()
                         .anyRequest().authenticated()
-                ).build();
+                ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 }
