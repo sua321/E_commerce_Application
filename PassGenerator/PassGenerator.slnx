@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="PassGenerator/PassGenerator.vcxproj" Id="9fdc14fe-7147-4e52-b94d-ebf73f3e992b" />
+</Solution>
