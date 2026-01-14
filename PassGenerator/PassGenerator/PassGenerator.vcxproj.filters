@@ -17,4 +17,20 @@
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Data\Data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Data fetching\DataFetch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Data\time_to_UTC.txt">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Data fetching\DataFetch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>

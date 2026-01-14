@@ -133,6 +133,14 @@
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Data fetching\DataFetch.h" />
+    <ClInclude Include="src\Data\Data.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Data fetching\DataFetch.cpp" />
+    <ClCompile Include="src\Data\time_to_UTC.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

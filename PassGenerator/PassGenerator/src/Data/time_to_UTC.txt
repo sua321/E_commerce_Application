@@ -1,0 +1,30 @@
+//#include "Data.h"
+
+//#include "Data.h"
+//#include <iostream>
+//#include <iomanip>
+//#include <ctime>
+//
+//int main()
+//{
+//    Data d("me@example.com");
+//
+//    // Convert to time_t then to UTC string
+//    std::time_t t = std::chrono::system_clock::to_time_t(d.time_sec);
+//    std::tm tm;
+//#ifdef _WIN32
+//    gmtime_s(&tm, &t);
+//#else
+//    gmtime_r(&t, &tm);
+//#endif
+//    char buf[32];
+//    std::strftime(buf, sizeof(buf), "%Y-%m-%dT%H:%M:%SZ", &tm);
+//
+//    std::cout << d.e_mail << " at " << buf << '\n';
+//
+//    // If you need seconds since epoch:
+//    auto secs = std::chrono::duration_cast<std::chrono::seconds>(d.time_sec.time_since_epoch()).count();
+//    std::cout << "seconds since epoch: " << secs << '\n';
+//
+//    return 0;
+//}
