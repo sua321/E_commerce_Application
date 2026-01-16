@@ -134,10 +134,15 @@
     <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Encoders\Base64.h" />
+    <ClInclude Include="src\Generator\Generator.h" />
     <ClInclude Include="src\Data fetching\DataFetch.h" />
     <ClInclude Include="src\Data\Data.h" />
+    <ClInclude Include="src\include\PassGenerator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Encoders\BitWiseEncoding.cpp" />
+    <ClCompile Include="src\Generator\Generator.cpp" />
     <ClCompile Include="src\Data fetching\DataFetch.cpp" />
     <ClCompile Include="src\Data\time_to_UTC.txt" />
   </ItemGroup>

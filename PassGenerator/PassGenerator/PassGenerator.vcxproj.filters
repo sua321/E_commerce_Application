@@ -24,12 +24,27 @@
     <ClInclude Include="src\Data fetching\DataFetch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Generator\Generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Encoders\Base64.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\PassGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Data\time_to_UTC.txt">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Data fetching\DataFetch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Generator\Generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Encoders\BitWiseEncoding.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
