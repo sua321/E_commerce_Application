@@ -1,12 +1,12 @@
 #include<cstdint>
 #include<bitset>
 #include<iostream>
+#include<array>
+void bitWiseEncoding (std::array<char, 3> (&letters), std::array<uint8_t, 4>& out) {
 
-static void bitWiseEncoding() {
-
-	uint8_t c1 = 'M'; // unsigned 8bit int 
-	uint8_t c2 = 'a'; // 'c' mean character
-	uint8_t c3 = 'n'; // defautl the data will be hold as bits
+	uint8_t c1 = letters[0]; // unsigned 8bit int 
+	uint8_t c2 = letters[1]; // 'c' mean character
+	uint8_t c3 = letters[2]; // defautl the data will be hold as bits
 
 	uint32_t buffer; //32bit unsigned int to hold 24 bit of characters
 
@@ -31,10 +31,12 @@ static void bitWiseEncoding() {
 		<< std::bitset<8>(b64c_2) << " " 
 		<< std::bitset<8>(b64c_3) << " "
 		<< std::bitset<8>(b64c_4) 
-		<< std::endl;
+		<< std::endl; 
+
+	out[0] = b64c_1;
+	out[1] = b64c_2;
+	out[2] = b64c_3;
+	out[3] = b64c_4;
 	
 }
 
-int main() {
-	bitWiseEncoding();
-}

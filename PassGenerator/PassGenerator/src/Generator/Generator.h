@@ -1,10 +1,10 @@
-#pragma once
-#include"../Data/Data.h"
-
-class Generator{
-	public:
-		Data* data;
-
-
-};
+//#pragma once
+//#include"../Data/Data.h"
+//
+//class Generator{
+//	public:
+//		Data* data;
+//
+//
+//};
 
