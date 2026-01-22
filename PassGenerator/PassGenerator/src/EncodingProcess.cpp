@@ -4,33 +4,39 @@
 #include<cstdint>
 
 std::string encodingProcess(std::string credentials) {
-	int realSize = credentials.size();
-	int loopLimit = (realSize / 3) -1;
-	int count = 0;
-
-	if (realSize % 3 != 0) {
-		loopLimit += 1;
-	}
-	std::array<char,3> letters;
-	std::array<uint8_t, 4> encodedNumbers;
 	std::string encodedString;
-	encodedString.reserve(100);
+	encodedString.reserve(credentials.size() * 2); // Reserve enough space
 
-	for (int i = 0; i < loopLimit; i++) {
+	std::array<char, 3> letters;
+	std::array<uint8_t, 4> encodedNumbers;
+
+	int realSize = credentials.size();
+
+	for (int i = 0; i < realSize; i += 3) {
 		letters.fill(0);
+		int charsCount = 0;
+
 		for (int j = 0; j < 3; j++) {
-			
-			if (count == realSize -1) {
-				break;
+			if (i + j < realSize) {
+				letters[j] = credentials[i + j];
+				charsCount++;
 			}
-			letters[j] = credentials[count];
-				count++;
 		}
 
-		bitWiseEncoding(letters,encodedNumbers);
+		bitWiseEncoding(letters, encodedNumbers);
 		base64Encoding(encodedNumbers, encodedString);
 
+		// Handle padding logic
+		if (charsCount < 3) {
+			if (charsCount == 1) {
+				encodedString[encodedString.size() - 1] = '=';
+				encodedString[encodedString.size() - 2] = '=';
+			}
+			else if (charsCount == 2) {
+				encodedString[encodedString.size() - 1] = '=';
+			}
+		}
 	}
-	return encodedString;;
+	return encodedString;
 }
 

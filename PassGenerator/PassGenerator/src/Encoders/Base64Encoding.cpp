@@ -12,9 +12,6 @@ void base64Encoding(std::array< uint8_t, 4> encodedInts, std::string& encodedStr
 
 	for (int i = 0; i < 4; i++) {
 		uint8_t encodedNumber = encodedInts[i];
-		if (!encodedNumber) {
-			encodedString += '=';
-		}
 		encodedString += base64WebAlphabet[encodedNumber];
 	}
 	
