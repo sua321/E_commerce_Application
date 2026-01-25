@@ -141,6 +141,7 @@
     <ClInclude Include="src\include\PassGenerator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Decoder\BitwiseDecoding.cpp" />
     <ClCompile Include="src\Encoders\BitWiseEncoding.cpp" />
     <ClCompile Include="src\Encoders\Base64Encoding.cpp" />
     <ClCompile Include="src\Generator\Generator.cpp" />
