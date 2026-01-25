@@ -2,6 +2,7 @@
 #include<bitset>
 #include<iostream>
 #include<array>
+
 void bitWiseEncoding (std::array<char, 3> (&letters), std::array<uint8_t, 4>& out) {
 
 	uint8_t c1 = letters[0]; // unsigned 8bit int 

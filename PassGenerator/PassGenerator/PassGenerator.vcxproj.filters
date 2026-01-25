@@ -27,10 +27,10 @@
     <ClInclude Include="src\Generator\Generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Encoders\Base64.h">
+    <ClInclude Include="src\include\PassGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\PassGenerator.h">
+    <ClInclude Include="src\Decoder\LookupTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,7 +53,7 @@
     <ClCompile Include="src\EncodingProcess.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\include\Main.cpp">
+    <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
