@@ -1,17 +1,18 @@
 #include<cstdint>
 #include<iostream>
 #include<bitset>
+#include"../include/PassGenerator.h"
 void bitwiseDecoding() {
-	uint8_t c1 = 'T';
-	uint8_t c2 = 'W';
-	uint8_t c3 = 'F';
-	uint8_t c4 = 'u';
+	uint8_t c1 = lookup_table[static_cast<int>('T')];
+	uint8_t c2 = lookup_table[static_cast<int>('W')];
+	uint8_t c3 = lookup_table[static_cast<int>('F')];
+	uint8_t c4 = lookup_table[static_cast<int>('u')];
 
 	uint32_t buffer;
 
-	buffer = (c1 << 18) | ((c2 << 2) << 12) | ((c3 << 2) << 6) | (c4 << 2);
+	buffer = (c1 << 18) | (c2 << 12) | (c3 << 6) | c4 ;
 
-	uint32_t mask = 0x100;
+    uint32_t mask = 0xFF;
 
 	//std::cout << std::bitset<32>(buffer) << std::endl;
 
