@@ -2,6 +2,7 @@
 #include"include/PassGenerator.h"
 #include<string>
 #include<print>
+#include"include/Security.h"
 void run() {
 	std::string credentials = "---";
 	std::string encodedString = encodingProcess(credentials);
@@ -12,6 +13,13 @@ void run() {
 	for (int i = 0; i < 3; i++) {
 		std::cout << out[i];
 	}
+
+	
+		// Test values
+		std::string test_key = "key";
+		std::string test_data = "The quick brown fox jumps over the lazy dog";
+		std::cout << "HMAC-SHA256: " << hmac_sha256(test_key, test_data) << std::endl;
+
 }
 
 int main() {

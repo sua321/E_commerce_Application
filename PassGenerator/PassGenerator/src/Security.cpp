@@ -10,3 +10,4 @@ std::string hmac_sha256(const std::string& key, const std::string& data) {
     // It creates an HMAC using the SHA256 algorithm.
     return hmac<SHA256>(data, key);
 }
+
