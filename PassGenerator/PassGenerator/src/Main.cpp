@@ -3,15 +3,17 @@
 #include<string>
 #include<print>
 void run() {
-	std::string credentials = "Man";
+	std::string credentials = "---";
 	std::string encodedString = encodingProcess(credentials);
-	std::cout << "Before Encoding : " << credentials << ", After Encoding" << encodedString << std::endl;
-	int count = 0;
-	for (int i = 0; i < lookup_table.size(); i++) { //lookup_table is in include/PassGenerator.h
-		std::cout << i << " : " << lookup_table[i] << std::endl;
-		if (lookup_table[i] != -1) {
-			count++;
-		}
+	std::array<char, 3> out;
+	std::array<uint8_t, 4> encoded = { encodedString[0], encodedString[1], encodedString[2], encodedString[3] }; // std::copy_n is easy way
+	bitwiseDecoding(encoded, out);
+	std::cout << credentials << "\n" << encodedString << std::endl;
+	for (int i = 0; i < 3; i++) {
+		std::cout << out[i];
 	}
-	std::cout << "Count : " << count << std::endl;
+}
+
+int main() {
+	run();
 }

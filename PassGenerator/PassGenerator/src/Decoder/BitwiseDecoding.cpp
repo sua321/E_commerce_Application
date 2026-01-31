@@ -2,11 +2,12 @@
 #include<iostream>
 #include<bitset>
 #include"../include/PassGenerator.h"
-void bitwiseDecoding() {
-	uint8_t c1 = lookup_table[static_cast<int>('T')];
-	uint8_t c2 = lookup_table[static_cast<int>('W')];
-	uint8_t c3 = lookup_table[static_cast<int>('F')];
-	uint8_t c4 = lookup_table[static_cast<int>('u')];
+#include<array>
+void bitwiseDecoding(std::array<uint8_t,4>& encodedCharacters, std::array<char,3>& words ) {
+	uint8_t c1 = lookup_table[static_cast<int>(encodedCharacters[0])];
+	uint8_t c2 = lookup_table[static_cast<int>(encodedCharacters[1])];
+	uint8_t c3 = lookup_table[static_cast<int>(encodedCharacters[2])];
+	uint8_t c4 = lookup_table[static_cast<int>(encodedCharacters[3])];
 
 	uint32_t buffer;
 
@@ -20,9 +21,9 @@ void bitwiseDecoding() {
 	uint8_t b2 = (buffer >> 8) & mask;
 	uint8_t b3 = (buffer & mask);
 
-	std::cout << (char)b1 << ", " << (char)b2 << ", " << (char)b3 << ", " << "end" << std::endl;
+	words[0] = b1;
+	words[1] = b2;
+	words[2] = b3;
 
 }
-int main() {
-	bitwiseDecoding();
- }
+
