@@ -10,9 +10,9 @@ std::string encodingProcess(std::string credentials) {
 	std::array<char, 3> letters;
 	std::array<uint8_t, 4> encodedNumbers;
 
-	int realSize = credentials.size();
+	size_t realSize = credentials.size();
 
-	for (int i = 0; i < realSize; i += 3) {
+	for (size_t i = 0; i < realSize; i += 3) {
 		letters.fill(0);
 		int charsCount = 0;
 

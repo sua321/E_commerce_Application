@@ -155,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dependencies\hash-library\sha256.cpp" />
+    <ClCompile Include="src\PassGenerator.cpp" />
     <ClCompile Include="src\Decoder\BitwiseDecoding.cpp" />
     <ClCompile Include="src\Encoders\BitWiseEncoding.cpp" />
     <ClCompile Include="src\Encoders\Base64Encoding.cpp" />
@@ -162,8 +163,10 @@
     <ClCompile Include="src\Data fetching\DataFetch.cpp" />
     <ClCompile Include="src\Data\time_to_UTC.txt" />
     <ClCompile Include="src\EncodingProcess.cpp" />
-    <ClCompile Include="src\Main.cpp" />
+
+    <ClCompile Include="src\Run.cpp" />
     <ClCompile Include="src\Security.cpp" />
+    <ClCompile Include="src\Test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

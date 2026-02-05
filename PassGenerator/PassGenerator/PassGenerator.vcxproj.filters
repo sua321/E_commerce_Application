@@ -56,9 +56,6 @@
     <ClCompile Include="src\EncodingProcess.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Decoder\BitwiseDecoding.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -66,6 +63,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\hash-library\sha256.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PassGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Run.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
