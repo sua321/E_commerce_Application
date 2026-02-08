@@ -3,29 +3,51 @@
 #include <chrono>
 #include <iomanip>
 #include <ctime>
+#include <string>
+#include"include/PassGenerator.h"
+#include<cstdint>
+#include"include/Security.h"
 
-void dataToString(const Data& data) {
+std::string dataToEncodedString(const Data& data, int& passExpireAt) {
     auto tp = data.time_sec;
-    std::time_t t = std::chrono::system_clock::to_time_t(tp);
+    std::time_t t = std::chrono::system_clock::to_time_t(tp); //Converts the high-level C++ "Time Point" into a time_t (an integer representing seconds).
 
-    std::tm tm;
-#if defined(_MSC_VER)
-    // MSVC: use the "secure" thread-safe API
-    localtime_s(&tm, &t);
-#else
-    // POSIX: localtime is thread-unsafe; use localtime_r if available
-    tm = *std::localtime(&t);
-#endif
-
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(tp.time_since_epoch()) % 1000;
-    std::cout << std::put_time(&tm, "%Y-%m-%d %H:%M:%S")
-              << '.' << std::setfill('0') << std::setw(3) << ms.count() << '\n';
-
+    // converting to seconds
     auto epoch_secs = std::chrono::duration_cast<std::chrono::seconds>(tp.time_since_epoch()).count();
     std::cout << "epoch seconds: " << epoch_secs << std::endl;
+
+    auto expire = epoch_secs + passExpireAt;
+
+    // JSON Header
+    std::string json_header =
+        "{"
+        "alg: HS256 ,"
+        "type: JWT"
+        "}";
+    std::string json_payload =
+        "{"
+        "sub : 1234567890,"
+        "email :" + data.e_mail + ","
+        "exp :" + std::to_string(expire) +
+        "}";
+    // encoding
+    std::string encoded_string_header = encodingProcess(json_header);
+    std::string encoded_string_payload = encodingProcess(json_payload);
+
+    return encoded_string_header + "." + encoded_string_payload;
+
 }
+
+void EncodedStringToData(){}
 
 int main() {
     Data data("Lol@email.com");
-    dataToString(data);
+    int one_year = 31556926;
+    std::string output = dataToEncodedString(data, one_year);
+    std::cout << output << std::endl;
+
+    std::string key = "sampleKey";
+    std::string encryptedData = hmac_sha256(key, output);
+    std::string jwt = output + "." + encryptedData;
+    std::cout << jwt << std::endl;
 }

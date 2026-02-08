@@ -2,6 +2,7 @@
 #include<iostream>
 #include<cstdint>
 #include<array>
+#include<string_view>
 
 consteval std::array<int, 256> lookupTable() {
 	constexpr std::string_view alphabet =

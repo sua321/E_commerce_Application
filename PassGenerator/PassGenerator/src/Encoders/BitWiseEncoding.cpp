@@ -15,7 +15,7 @@ void bitWiseEncoding (std::array<char, 3> (&letters), std::array<uint8_t, 4>& ou
 	
 	buffer = (c1 << 16) | (c2 << 8) | (c3);
 
-	std::cout << std::bitset<24>(buffer) << std::endl;
+	//std::cout << std::bitset<24>(buffer) << std::endl;
 
 	//creating mask to filter(...00111111 in 32bit) out the buffer to get 6 bits of chunks
 
@@ -28,11 +28,11 @@ void bitWiseEncoding (std::array<char, 3> (&letters), std::array<uint8_t, 4>& ou
 	uint8_t b64c_3 = (buffer >> 6) & mask;
 	uint8_t b64c_4 = buffer & mask;
 
-	std::cout << std::bitset<8>(b64c_1) << " " 
+	/*std::cout << std::bitset<8>(b64c_1) << " " 
 		<< std::bitset<8>(b64c_2) << " " 
 		<< std::bitset<8>(b64c_3) << " "
 		<< std::bitset<8>(b64c_4) 
-		<< std::endl; 
+		<< std::endl; */
 
 	out[0] = b64c_1;
 	out[1] = b64c_2;
