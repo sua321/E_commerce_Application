@@ -1,0 +1,48 @@
+File Structure Map for PassGenerator Project
+==========================================
+
+Root Directory: d:\MyProject\PassGenerator
+
+├── PassGenerator/              [Main Source Directory]
+│   ├── src/                    [Source Code]
+│   │   ├── Data/               [Data Models]
+│   │   │   ├── Data.h          : Defines the `Data` class (email, timestamp) used for encoding payload.
+│   │   │   └── time_to_UTC.txt : Reference/data file related to time zones.
+│   │   │
+│   │   ├── Data fetching/      [Data Retrieval Module]
+│   │   │   ├── DataFetch.h     : Declarations for `fetchData` function.
+│   │   │   └── DataFetch.cpp   : Implementation of data fetching logic.
+│   │   │
+│   │   ├── Decoder/            [Decoding Logic]
+│   │   │   ├── BitwiseDecoding.cpp : Implements bitwise operations for decoding.
+│   │   │   └── LookupTable.h   : Lookup tables used for decoding/encoding operations.
+│   │   │
+│   │   ├── Encoders/           [Encoding Logic]
+│   │   │   ├── Base64Encoding.cpp : Implements Base64 encoding logic.
+│   │   │   └── BitWiseEncoding.cpp: Implements custom bitwise encoding logic.
+│   │   │
+│   │   ├── include/            [Shared Headers]
+│   │   │   ├── PassGenerator.h : Main header for shared utilities/function declarations.
+│   │   │   └── Security.h      : Header for security functions (HMAC, SHA256).
+│   │   │
+│   │   ├── Run.cpp             : Main entry point. Generates JWTs using encoding/security functions.
+│   │   ├── EncodingProcess.cpp : Orchestrates the encoding workflow (Bitwise -> Base64).
+│   │   ├── DecodingProcess.cpp : Skeleton for decoding logic.
+│   │   ├── Security.cpp        : Implements cryptographic functions (HMAC-SHA256).
+│   │   └── Test.cpp            : Testing sandbox for experimental code.
+│   │
+│   ├── CMakeLists.txt          : Build configuration for CMake.
+│   ├── PassGenerator.exe       : Compiled executable.
+│   ├── PassGenerator.vcxproj   : Visual Studio project file.
+│   └── PassGenerator.vcxproj.filters : VS project filters.
+│
+├── dependencies/               [External Libraries]
+│   ├── hash-library/           : External hashing implementation (SHA256, etc.).
+│   └── mbedtls/                : External TLS/cryptography library.
+│
+├── bin/                        [Binaries]
+│   └── (Contains output binaries)
+│
+├── .vs/                        [Visual Studio Config]
+├── .vscode/                    [VS Code Config]
+└── Makefile                    [Build Script]

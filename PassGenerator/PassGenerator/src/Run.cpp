@@ -38,16 +38,16 @@ std::string dataToEncodedString(const Data& data, int& passExpireAt) {
 
 }
 
-void EncodedStringToData(){}
-
-int main() {
-    Data data("Lol@email.com");
-    int one_year = 31556926;
-    std::string output = dataToEncodedString(data, one_year);
-    std::cout << output << std::endl;
-
-    std::string key = "sampleKey";
-    std::string encryptedData = hmac_sha256(key, output);
-    std::string jwt = output + "." + encryptedData;
-    std::cout << jwt << std::endl;
-}
+//void EncodedStringToData(){}
+//
+//int main() {
+//    Data data("Lol@email.com");
+//    int one_year = 31556926;
+//    std::string output = dataToEncodedString(data, one_year);
+//    std::cout << output << std::endl;
+//
+//    std::string key = "sampleKey";
+//    std::string encryptedData = hmac_sha256(key, output);
+//    std::string jwt = output + "." + encryptedData;
+//    std::cout << jwt << std::endl;
+//}
