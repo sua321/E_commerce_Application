@@ -38,16 +38,36 @@ std::string dataToEncodedString(const Data& data, int& passExpireAt) {
 
 }
 
-//void EncodedStringToData(){}
-//
-//int main() {
-//    Data data("Lol@email.com");
-//    int one_year = 31556926;
-//    std::string output = dataToEncodedString(data, one_year);
-//    std::cout << output << std::endl;
-//
-//    std::string key = "sampleKey";
-//    std::string encryptedData = hmac_sha256(key, output);
-//    std::string jwt = output + "." + encryptedData;
-//    std::cout << jwt << std::endl;
-//}
+void decodedStringToData(std::string& encoded, std::string& header, std::string& payload){
+
+    size_t index_dot = encoded.find('.');
+    std::string header_encoded = encoded.substr(0, index_dot);
+    std::string payload_encoded = encoded.substr(index_dot + 1, (encoded.size() - (index_dot+1)));
+    std::cout << header_encoded << std::endl;
+    std::cout << payload_encoded << std::endl;
+  
+    for (int i = 0; i < 2; i++) {
+        decodingProcess(header_encoded, header);
+        decodingProcess(payload_encoded, payload);
+    }
+
+}
+
+int main() {
+    Data data("Lol@email.com");
+    int one_year = 31556926;
+    std::string output = dataToEncodedString(data, one_year);
+    std::cout << output << std::endl;
+
+    std::string key = "sampleKey";
+    std::string encryptedData = hmac_sha256(key, output);
+    std::string jwt = output + "." + encryptedData;
+    //std::cout << jwt << std::endl;
+
+    std::string header;
+    std::string payload;
+    decodedStringToData(output, header, payload);
+
+    //std::cout << header << "\n" << payload << std::endl;
+
+}
