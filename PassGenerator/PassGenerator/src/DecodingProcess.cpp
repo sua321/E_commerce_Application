@@ -22,12 +22,18 @@ void decodingProcess(std::string& encoded, std::string& credentials) {
 		letters[2] = encoded[i+2];
 		letters[3] = encoded[i+3];
 		bitwiseDecoding(letters, words);
-		credentials += {words[0], words[1], words[2]};
 
-		// or
-		/*if (words[0] != '\0') credentials += words[0]; // but not necessary bcs the words already decleared with 3 reseverd space
-		if (words[1] != '\0') credentials += words[1];
-		if (words[2] != '\0') credentials += words[2];*/
+		// Handle padding
+		if (letters[2] == 0) { // Two padding chars '=='
+			credentials += words[0];
+		}
+		else if (letters[3] == 0) { // One padding char '='
+			credentials += words[0];
+			credentials += words[1];
+		}
+		else { // No padding
+			credentials += {words[0], words[1], words[2]};
+		}
 		
 		
 	}
