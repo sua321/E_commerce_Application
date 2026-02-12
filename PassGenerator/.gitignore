@@ -1,0 +1,34 @@
+# CMake
+cmake-build-debug/
+build/
+CMakeFiles/
+CMakeCache.txt
+*.cmake
+Makefile
+*.ninja
+_deps/
+
+# IDE
+.vscode/
+.idea/
+*.sln
+*.vcxproj
+*.vcxproj.user
+
+# Binaries
+bin/
+*.exe
+*.dll
+*.lib
+*.so
+*.a
+*.dylib
+*.out
+
+# Resources copied during build (optional, depending on preference)
+# but we want to ignore the copies, not the source
+# Data/time_to_UTC.txt is source, don't ignore.
+
+# System
+.DS_Store
+Thumbs.db

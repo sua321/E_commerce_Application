@@ -151,6 +151,7 @@
     <ClInclude Include="src\Data\Data.h" />
     <ClInclude Include="src\include\PassGenerator.h" />
     <ClInclude Include="src\include\Security.h" />
+    <ClInclude Include="src\Run.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dependencies\hash-library\sha256.cpp" />
