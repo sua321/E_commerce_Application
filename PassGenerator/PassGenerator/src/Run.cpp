@@ -10,7 +10,7 @@
 #include<stdexcept>
 
 namespace PassGen {
-        std::pair<std::string, std::string> generateToken(const Data& user, int& expireSeconds, const std::string& secretKey) {
+        std::string generateToken(const Data& user, int& expireSeconds, const std::string& secretKey) {
             auto tp = user.time_sec;
             std::time_t t = std::chrono::system_clock::to_time_t(tp); //Converts the high-level C++ "Time Point" into a time_t (an integer representing seconds).
 
@@ -39,25 +39,25 @@ namespace PassGen {
             std::string unsigned_token = encoded_string_header + "." + encoded_string_payload;
             std::string encryptedData = hmac_sha256(unsigned_token, secretKey);
             std::string jwt = unsigned_token + "." + encryptedData;
-            return { jwt, unsigned_token};
+            return  jwt;
         }
 
-        std::pair<std::string, std::string> decodeToken(std::string& encoded) {
+        bool decodeToken(std::string& token, std::string& header, std::string& payload) {
 
-            size_t index_dot = encoded.find('.');
-            if (index_dot == std::string::npos) {
-                throw std::runtime_error(" '.' is Not found in the encoded string");
+            size_t index_1st_dot = token.find('.');
+            size_t index_2nd_dot = token.rfind('.');
+            if (index_1st_dot == std::string::npos || index_2nd_dot == std::string::npos ) {
+                return false;
             }
-            std::string header_encoded = encoded.substr(0, index_dot);
-            std::string payload_encoded = encoded.substr(index_dot + 1, (encoded.size() - (index_dot + 1)));
+            std::string header_encoded = token.substr(0, index_1st_dot);
+            std::string payload_encoded = token.substr(index_1st_dot + 1,  index_2nd_dot - (index_1st_dot+1));
             //std::cout << header_encoded << std::endl;
             //std::cout << payload_encoded << std::endl;
-            std::string header;
-            std::string payload;
+            
             decodingProcess(header_encoded, header),
             decodingProcess(payload_encoded, payload);
 
-            return {header , payload};
+            return true;
 
 
         }
@@ -67,14 +67,13 @@ namespace PassGen {
 //    Data data("Lol@email.com");
 //    int one_year = 31556926;
 //    std::string key = "very secure";
-//    auto jwt_pair = PassGen::generateToken(data, one_year, key);
-//    std::string output = jwt_pair.second;
-//    std::cout << output << std::endl;
+//    std::string jwt = PassGen::generateToken(data, one_year, key);
+//    std::cout << jwt << std::endl;
 //
 //    std::string header;
 //    std::string payload;
-//   auto decoded_pair =  PassGen::decodeToken(output);
-//
-//    std::cout << decoded_pair.first<< "\n" << decoded_pair.second << std::endl;
+//   auto decoded_pair =  PassGen::decodeToken(jwt, header, payload);
+//   std::cout <<  decoded_pair << std::endl;
+//    std::cout << header<< "\n" << payload << std::endl;
 //
 //}
