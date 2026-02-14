@@ -3,5 +3,8 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="PassGenerator/PassGenerator.vcxproj" Id="9fdc14fe-7147-4e52-b94d-ebf73f3e992b" />
+  <!-- Target 1: Shared Library (DLL) -->
+  <Project Path="PassGenerator/libPassGenerator.vcxproj" Id="A1B2C3D4-1111-2222-3333-444455556666" />
+  <!-- Target 2: Test Executable (links to libPassGenerator) -->
+  <Project Path="PassGenerator/PassGenerator_Test.vcxproj" Id="B2C3D4E5-5555-6666-7777-888899990000" />
 </Solution>

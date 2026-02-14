@@ -1,27 +1,34 @@
-#include<iostream>
-#include"include/PassGenerator.h"
-#include<string>
-#include<print>
-#include"include/Security.h"
-void run() {
-	std::string credentials = "---";
-	std::string encodedString = encodingProcess(credentials);
-	std::array<char, 3> out;
-	std::array<uint8_t, 4> encoded = { static_cast<uint8_t>(encodedString[0]), static_cast<uint8_t>(encodedString[1]), static_cast<uint8_t>(encodedString[2]), static_cast<uint8_t>(encodedString[3]) }; // std::copy_n is easy way
-	bitwiseDecoding(encoded, out);
-	std::cout << credentials << "\n" << encodedString << std::endl;
-	for (int i = 0; i < 3; i++) {
-		std::cout << out[i];
-	}
+// =============================================================================
+// Test.cpp — Test Executable
+// =============================================================================
+// Standalone executable that links against libPassGenerator to verify that
+// token generation and decoding work correctly.
+// =============================================================================
+
+#include <iostream>
+#include <string>
+
+#include "Data/Data.h"
+#include "include/PassGenerator.h"
+
+// Header already included
 
 
-	// Test values
-	std::string test_key = "key";
-	std::string test_data = "The quick brown fox jumps over the lazy dog";
-	std::cout << "HMAC-SHA256: " << hmac_sha256(test_key, test_data) << std::endl;
+int main() {
+    // --- Generate a JWT ---
+    Data data("Lol@email.com");
+    int one_year = 31556926;
+    std::string key = "very secure";
+    std::string jwt = PassGen::generateToken(data, one_year, key);
+    std::cout << "Generated JWT:\n" << jwt << std::endl;
 
+    // --- Decode the JWT ---
+    std::string header;
+    std::string payload;
+    bool ok = PassGen::decodeToken(jwt, header, payload);
+    std::cout << "\nDecode success: " << ok << std::endl;
+    std::cout << "Header:  " << header  << std::endl;
+    std::cout << "Payload: " << payload << std::endl;
+
+    return 0;
 }
-
-//int main() {
-//	run();
-//}
