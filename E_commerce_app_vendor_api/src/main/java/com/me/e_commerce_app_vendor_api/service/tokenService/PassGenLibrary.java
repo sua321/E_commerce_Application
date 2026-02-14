@@ -1,3 +1,5 @@
+package com.me.e_commerce_app_vendor_api.service.tokenService;
+
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
