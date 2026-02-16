@@ -10,6 +10,8 @@ import com.me.e_commerce_application.models.other_dependencies.UserFavourite;
 import com.me.e_commerce_application.models.sub_dependencies.UserCredentials;
 import com.me.e_commerce_application.repositories.*;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,14 +23,36 @@ import java.util.regex.Pattern;
 @Service
 public class UserInAppService {
     private final UsersRepository usersRepository;
+
     private final UserCartRepository userCartRepository;
     private final UsersFavouriteRepository usersFavouriteRepository;
     private final UsersCommentsRepository usersCommentsRepository;
     private final UsersCredentialsRepository usersCredentialsRepository;
     private final Pattern emailPattern;
 
+
+    // getting current user's principle(username or email)
+    String gettingUserId(){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null){
+             throw new NullPointerException("Authentication is null");
+        }
+        String identifier = (String)authentication.getPrincipal();
+        if(isItEmail(identifier)){
+            return usersCredentialsRepository.findUsersCredentialsByEmail(identifier).getId();
+        }
+        return usersRepository.findUserByUserName(identifier).getId();
+    }
+
+    //is identifier user email or id
+    private boolean isItEmail(String identifier){
+
+        return emailPattern.matcher(identifier).matches();
+    }
+
     // List of the cart for display
-    public List<ShowingUserCartShortDto> showUserCart(String id) {
+    public List<ShowingUserCartShortDto> showUserCart() {
+        String id = gettingUserId();
         List<ShowingUserCartShortDto> shortCart = new ArrayList<>();
         List<UserCart> userCart = userCartRepository.findAllByUsersId(id);
         // mapping to showingUserCartShortDto
@@ -52,7 +76,7 @@ public class UserInAppService {
     }
 
     // individual item of cart for display
-    public ShowingUserCartFullDto showSpecificItemInCart(String userId, String itemId) {
+    public ShowingUserCartFullDto showSpecificItemInCart( String itemId) {
         /*
         * String userId;
     String userName;
@@ -64,14 +88,22 @@ public class UserInAppService {
     String manufacture;
     String price;
     boolean availability;*/
+        String userId = gettingUserId();
+        if (userId == null){
+            return null;
+        }
         Users users = usersRepository.findById(userId).orElseThrow();
         UserCart userCart = userCartRepository.findByUsersIdAndItemId(userId, itemId);
+        if (userCart == null){
+            System.out.println("userCart is null");
+            return null;
+        }
         ItemFullDto item = ItemService.showOneItem(itemId);
         // mapping
         return ShowingUserCartFullDto.builder()
                 .userId(users.getId())
                 .userName(users.getUserName())
-                .addedDateAndTime(userCart.getDateTime())
+                .addedDateAndTime(userCart.getDateTime()) // important: throws null pointer exception
                 .itemId(item.itemId)
                 .itemImage(item.showCaseImage) // this should not be showcase image rather image of item users added to the cart
                 .count(item.stock)
@@ -81,14 +113,18 @@ public class UserInAppService {
                 .availability(item.availability)
                 .build();
     }
-
-    public List<FetchingUserFavouriteDto> fetchingAllUserFavourite(String userId) {
-        List<UserFavourite> userFavourite = usersFavouriteRepository.findAll();
+    @Transactional
+    public List<FetchingUserFavouriteDto> fetchingAllUserFavourite() {
+        String userId = gettingUserId();
+        if (userId == null){
+            return null;
+        }
+        List<UserFavourite> userFavourite = usersFavouriteRepository.findAllByUsersId(userId);
         List<FetchingUserFavouriteDto> FetchingUserFavouriteDtos = new ArrayList<>();
         for (UserFavourite favourite : userFavourite) {
             FetchingUserFavouriteDtos.add(
                     FetchingUserFavouriteDto.builder()
-                            .userId(favourite.getUserId())
+                            .userId(favourite.getUsers().getId())
                             .ItemId(favourite.getItemId())
                             .build()
             );
@@ -106,7 +142,11 @@ public class UserInAppService {
         return new ArrayList<>();
     }
 
-    public List<FetchingUserComments> showingOneUserComment(String userId, String ItemId) {
+    public List<FetchingUserComments> showingOneUserComment(String ItemId) {
+        String userId = gettingUserId();
+        if (userId == null){
+            return null;
+        }
         Users users = usersRepository.findById(userId).orElseThrow();
         List<UserComments> userComments = usersCommentsRepository.findAllByUsersIdAndItemId(userId, ItemId);
         List<FetchingUserComments> comments = new ArrayList<>();
@@ -126,27 +166,25 @@ public class UserInAppService {
 
     //UserProfile
     @Transactional
-    public UserProfileDto showingUserProfile(String identifier) {
-        UserCredentials userCredentials;
-        Users users;
-        if(emailPattern.matcher(identifier).matches()){
-         userCredentials = usersCredentialsRepository.findUsersCredentialsByEmail(identifier); // need to be secure(need to check is the jwt token valid)
-         users = usersRepository.findById(userCredentials.getId()).orElseThrow();
-        }else {
-            users = usersRepository.findUserByUserName(identifier);
-            userCredentials = usersCredentialsRepository.findById(users.getId()).orElseThrow(); // need to be secure(need to check is the jwt token valid)
-        }
+    public UserProfileDto showingUserProfile() {
+        String userId = gettingUserId();
+        if (userId == null)
+            return null;
+        Users user = usersRepository.findById(userId).orElseThrow();
+        UserCredentials userCredentials = usersCredentialsRepository.findById(userId).orElseThrow();
+
+
 
         // Mapping & Initializing Collections
         // We wrap them in new ArrayList<>(...) to force Hibernate to fetch the data NOW while the transaction is open.
         return UserProfileDto.builder() //need to add profile pic,first and lastname
-                .id(users.getId())
-                .userName(users.getUserName())
+                .id(user.getId())
+                .userName(user.getUserName())
                 .email(userCredentials.getEmail())
-                .fullName(users.getFullName())
-                .userType(users.getUserType())
-                .phoneNumbers(new ArrayList<>(users.getPhoneNumbers()))
-                .addresses(new ArrayList<>(users.getAddresses()))
+                .fullName(user.getFullName())
+                .userType(user.getUserType())
+                .phoneNumbers(new ArrayList<>(user.getPhoneNumbers()))
+                .addresses(new ArrayList<>(user.getAddresses()))
                 .build();
 
 

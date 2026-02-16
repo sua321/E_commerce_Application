@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: E_commerce_Application
@@ -17,5 +20,3 @@ spring:
 external:
   api:
     url: ${EXTERNAL_API}
-
-

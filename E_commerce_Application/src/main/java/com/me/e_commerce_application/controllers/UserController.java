@@ -17,49 +17,61 @@ import java.util.List;
 public class UserController {
     private final UserInAppService userInAppService;
 
-    @GetMapping("/userCart/{id}")
-    public List<ShowingUserCartShortDto> showUserCart(@PathVariable String  id) {
-        // I use  the SavingUserCartDto is for example, but it has different purpose(saving in db)
-        return userInAppService.showUserCart(id);
+    @GetMapping("/userCart")
+    public ResponseEntity<List<ShowingUserCartShortDto>> showUserCart() {
+        var cart = userInAppService.showUserCart();
+        if (cart == null){
+            return ResponseEntity.notFound().build();
+        }
+                return ResponseEntity.ok(cart);
     }
         // these itemId and userId will be come from frontend
-    public ShowingUserCartFullDto showSpecificItemInCart(String userId, String itemId) {
-        return userInAppService.showSpecificItemInCart(userId, itemId);
+    @GetMapping("/userCart/{itemId}")
+    public ResponseEntity<ShowingUserCartFullDto> showSpecificItemInCart( @PathVariable String itemId) {
+        var oneItem = userInAppService.showSpecificItemInCart(itemId);
+        if(oneItem == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(oneItem);
     }
 //Users Profile
     @GetMapping("/profile")// getting user using SecurityContextHolder
     public ResponseEntity<UserProfileDto> showingUserProfile(){
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null){
+
+            UserProfileDto userProfileDto = userInAppService.showingUserProfile();
+        if (userProfileDto == null){
             return ResponseEntity.notFound().build();
         }
-        var identifier = (String) authentication.getPrincipal();
-            UserProfileDto userProfileDto = userInAppService.showingUserProfile(identifier);
-            if (userProfileDto == null) {
-//                System.out.println("User is null");
-                return ResponseEntity.notFound().build();
-            }
+
 //        System.out.println("user is here : " + userProfileDto);
         return ResponseEntity.ok(userProfileDto);
     }
 
     //Note: i can use React use effect for fetching this alongside with other http request
     //Users Favourite
-    public List<FetchingUserFavouriteDto> fetchingAllUserFavourite(String userId) {
-        return userInAppService.fetchingAllUserFavourite(userId);
+    @GetMapping("/userFavourite")
+    public ResponseEntity<List<FetchingUserFavouriteDto>> fetchingAllUserFavourite() {
+        var userFavourite = userInAppService.fetchingAllUserFavourite();
+        if (userFavourite == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userFavourite);
     }
 
-//    public ItemFullDto showingOneUserFavourite(String userId, String ItemId) {
-//        return userService.showingOneUserFavourite(userId, ItemId);
-//    }
 
     //Users comments
 //    public List<FetchingUserComments> showingAllUserComment(String userId) {
-//        return userService.showingAllUserComment(userId);
+//        return userInAppService.showingAllUserComment(userId);
 //    }
-
-    public List<FetchingUserComments> showingOneUserComment(String userId, String ItemId) {
+    @GetMapping("/userComment/{ItemId}")
+    public ResponseEntity<List<FetchingUserComments>> showingOneUserComment(@PathVariable String ItemId) {
 //        Note: i can use React use effect for fetching this alongside with other http request
-        return userInAppService.showingOneUserComment(userId, ItemId);
+        var userComments = userInAppService.showingOneUserComment(ItemId);
+        if (userComments == null){
+            return ResponseEntity.notFound().build();
+        }
+
+//        System.out.println("user is here : " + userProfileDto);
+        return ResponseEntity.ok(userComments);
     }
 }

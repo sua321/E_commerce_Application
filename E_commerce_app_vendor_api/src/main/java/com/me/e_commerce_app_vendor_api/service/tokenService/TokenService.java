@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TokenService {
-    public String createToken(String email) {
+    public String createToken(String email, int expire , String secretKey) {
         // 1. Call the C++ library
-        Pointer ptr = PassGenLibrary.INSTANCE.generate_token(email, 3600, "my_secret_key");
+        Pointer ptr = PassGenLibrary.INSTANCE.generate_token(email, expire, secretKey);
 
         // 2. Extract the string value from the memory pointer
         String token = ptr.getString(0);
@@ -16,5 +16,12 @@ public class TokenService {
         PassGenLibrary.INSTANCE.free_string(ptr);
 
         return token;
+    }
+    public String decodeToken(String token){
+        Pointer ptr = PassGenLibrary.INSTANCE.decode_token_payload(token);
+        String payload = ptr.getString(0);
+        PassGenLibrary.INSTANCE.free_string(ptr);
+        return payload;
+
     }
 }

@@ -15,16 +15,18 @@ import lombok.*;
 @Table(name = "user_favourite")
 public class UserFavourite {
     @Id
-    @Column(name = "user_id")
+    @Column(name = "id")
     @EqualsAndHashCode.Include
-    private String userId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String Id;
+
 
     @Column(name = "item_id", nullable = false)
     private String itemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
     private Users users;
 }

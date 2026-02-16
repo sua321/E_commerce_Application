@@ -12,8 +12,9 @@ CREATE TABLE user_cart
 
 CREATE TABLE user_favourite
 (
-    user_id VARCHAR(36) NOT NULL
+    id      VARCHAR(36) NOT NULL
         PRIMARY KEY,
+    user_id VARCHAR(36) NOT NULL,
     item_id VARCHAR(36) NOT NULL,
     CONSTRAINT user_favourite_user_id_fk
         FOREIGN KEY (user_id) REFERENCES user (id)
