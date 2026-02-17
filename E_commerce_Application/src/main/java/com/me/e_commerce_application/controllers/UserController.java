@@ -60,9 +60,16 @@ public class UserController {
 
 
     //Users comments
-//    public List<FetchingUserComments> showingAllUserComment(String userId) {
-//        return userInAppService.showingAllUserComment(userId);
-//    }
+    @GetMapping("/userComment")
+    public ResponseEntity<List<AllCommentsDto>> showingAllUserComment() {
+        var userComments = userInAppService.showingAllUserComment();
+        if (userComments == null){
+            return ResponseEntity.notFound().build();
+        }
+
+//        System.out.println("user is here : " + userProfileDto);
+        return ResponseEntity.ok(userComments);
+    }
     @GetMapping("/userComment/{ItemId}")
     public ResponseEntity<List<FetchingUserComments>> showingOneUserComment(@PathVariable String ItemId) {
 //        Note: i can use React use effect for fetching this alongside with other http request

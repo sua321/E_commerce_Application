@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface UsersCommentsRepository extends JpaRepository<UserComments, String> {
     List<UserComments> findAllByUsersIdAndItemId(String userId, String itemId);
+    List<UserComments> findAllByUsersId(String userId);
 }

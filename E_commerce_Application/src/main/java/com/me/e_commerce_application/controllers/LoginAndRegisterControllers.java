@@ -54,7 +54,7 @@ public class LoginAndRegisterControllers {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login Failed: Invalid username or password");
         }
     }
-    @PostMapping("/validate")
+    @PostMapping("/validate") // this is manual check and only used for testing and automated check happens in filter(JWTAuthenticationFilter)
     public boolean validate(@RequestHeader("Authorization") String authHeader){
         var token = authHeader.replace("Bearer ", "");
         System.out.println("Request Validated");

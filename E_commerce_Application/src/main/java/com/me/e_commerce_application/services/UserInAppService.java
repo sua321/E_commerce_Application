@@ -10,7 +10,6 @@ import com.me.e_commerce_application.models.other_dependencies.UserFavourite;
 import com.me.e_commerce_application.models.sub_dependencies.UserCredentials;
 import com.me.e_commerce_application.repositories.*;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,9 +136,25 @@ public class UserInAppService {
 //        return new ItemFullDto();
 //    }
 
-    public List<FetchingUserComments> showingAllUserComment(String userId) {
-
-        return new ArrayList<>();
+    public List<AllCommentsDto> showingAllUserComment() {
+        String userId = gettingUserId();
+        List<AllCommentsDto> allComments = new ArrayList<>();
+        if (userId == null){
+            return null;
+        }
+        Users users = usersRepository.findById(userId).orElseThrow();
+        List<UserComments> userComments = usersCommentsRepository.findAllByUsersId(userId);
+        for (UserComments userComment : userComments) {
+            allComments.add(
+                    AllCommentsDto.builder()
+                            .userId(users.getId())
+                            .userName(users.getUserName())
+                            .comment(userComment.getComment())
+                            .date(userComment.getDateTime())
+                            .build()
+            );
+        }
+        return allComments;
     }
 
     public List<FetchingUserComments> showingOneUserComment(String ItemId) {
